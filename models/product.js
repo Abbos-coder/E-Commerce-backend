@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { required, boolean } = require("joi");
 
 const productSchema = new mongoose.Schema({
    category: {
@@ -9,19 +8,23 @@ const productSchema = new mongoose.Schema({
    },
    image: {
       type: Object,
+      default: "",
       required: true,
    },
    title: {
       type: String,
       required: true,
+      trim: true,
    },
    price: {
       type: Number,
       required: true,
+      trim: true,
    },
    rating: {
       type: Number,
       default: 4.5,
+      trim: true,
       required: false,
    },
    status: {
@@ -33,7 +36,11 @@ const productSchema = new mongoose.Schema({
 
 function validateProduct(product) {
    const schema = Joi.object({
-      name: Joi.string().min(2).required(),
+      category: Joi.string().required(),
+      title: Joi.string().required(),
+      price: Joi.number().required(),
+      status: Joi.boolean().required(),
+      rating: Joi.number(),
    });
    return schema.validate(product);
 }
@@ -42,4 +49,4 @@ const Product = mongoose.model("Product", productSchema);
 
 exports.Product = Product;
 exports.validateProduct = validateProduct;
-exports.productSchema = productSchema;
+// exports.productSchema = productSchema;
