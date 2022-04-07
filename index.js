@@ -8,6 +8,7 @@ const productRoute = require("./routes/product");
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static("images"));
 app.use("/api/product", productRoute);
 mongoose.connect("mongodb://localhost/diplom", {

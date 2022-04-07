@@ -5,6 +5,7 @@ const path = require("path");
 const { Product, validateProduct } = require("../models/product");
 const url = require("url");
 
+// get all
 router.get("/", async (req, res) => {
    const products = await Product.find({});
    res.send(products);
@@ -19,7 +20,7 @@ const fileStorageEngine = multer.diskStorage({
    },
 });
 const upload = multer({ storage: fileStorageEngine });
-
+// post new product
 router.post("/", upload.single("image"), async (req, res) => {
    const { error } = validateProduct(req.body);
    if (error) return res.status(400).send(error.details[0].message);
@@ -32,19 +33,13 @@ router.post("/", upload.single("image"), async (req, res) => {
       status: req.body.status,
    });
    product = await product.save();
-
    res.status(201).send(product);
 });
-router.get("/category/:productId", async (req, res) => {
-   //  const url_parts = url.parse(req.url, true);
-   //  const query = url_parts.query;
-   console.log("req url " + url);
-   res.send(url);
-
-   //  let product = await Product.findById(req.params.productId);
-   //  if (!product)
-   //     return res.status(404).send("product not found check it again!");
-   //  res.send(product);
+// get all from category
+router.get("/category/:categoryId", async (req, res) => {
+   const category = req.params.categoryId;
+   let product = await Product.find({ category: category });
+   res.send(product);
 });
 
 router.get("/:id", async (req, res) => {
@@ -54,11 +49,21 @@ router.get("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+   console.log("req", req);
+   const form = { ...req.body };
    const { error } = validateProduct(req.body);
    if (error) return res.status(400).send(error.details[0].message);
-   let product = await Product.findByIdAndUpdate(
+
+   const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { name: req.body.name },
+      {
+         category: form.category,
+         image: "http://localhost:8080/" + req.file.path,
+         title: form.title,
+         price: form.price,
+         rating: form.rating,
+         status: form.status,
+      },
       { new: true }
    );
 
