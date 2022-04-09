@@ -5,12 +5,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 // TODO routes link here
 const productRoute = require("./routes/product");
+const userRoute = require("./routes/user");
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static("images"));
 app.use("/api/product", productRoute);
+app.use("/api/users", userRoute);
 mongoose.connect("mongodb://localhost/diplom", {
    useNewUrlParser: true,
    useUnifiedTopology: true,
