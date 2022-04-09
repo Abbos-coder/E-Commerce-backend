@@ -3,7 +3,9 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const { Product, validateProduct } = require("../models/product");
+const url = require("url");
 
+// get all
 router.get("/", async (req, res) => {
    const products = await Product.find({});
    res.send(products);
@@ -14,27 +16,29 @@ const fileStorageEngine = multer.diskStorage({
       cb(null, "./images/");
    },
    filename: (req, file, cb) => {
-      console.log(`http://localhost:8080/images/${file.originalname}`);
       cb(null, Date.now() + file.originalname);
    },
 });
 const upload = multer({ storage: fileStorageEngine });
-
+// post new product
 router.post("/", upload.single("image"), async (req, res) => {
    const { error } = validateProduct(req.body);
    if (error) return res.status(400).send(error.details[0].message);
    let product = new Product({
-      name: req.body.name,
-      image: req.file,
+      category: req.body.category,
+      image: "http://localhost:8080/" + req.file.path,
+      title: req.body.title,
+      price: req.body.price,
+      rating: req.body.rating,
+      status: req.body.status,
    });
    product = await product.save();
-
    res.status(201).send(product);
 });
-router.get("/:productId", async (req, res) => {
-   let product = await Product.findById(req.params.productId);
-   if (!product)
-      return res.status(404).send("product not found check it again!");
+// get all from category
+router.get("/category/:categoryId", async (req, res) => {
+   const category = req.params.categoryId;
+   let product = await Product.find({ category: category });
    res.send(product);
 });
 
@@ -45,11 +49,21 @@ router.get("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+   console.log("req", req);
+   const form = { ...req.body };
    const { error } = validateProduct(req.body);
    if (error) return res.status(400).send(error.details[0].message);
-   let product = await Product.findByIdAndUpdate(
+
+   const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { name: req.body.name },
+      {
+         category: form.category,
+         image: "http://localhost:8080/" + req.file.path,
+         title: form.title,
+         price: form.price,
+         rating: form.rating,
+         status: form.status,
+      },
       { new: true }
    );
 
