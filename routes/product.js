@@ -3,8 +3,14 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const { Product, validateProduct } = require("../models/product");
-const url = require("url");
+const auth = require("../middleware/auth");
 
+// get rondom
+router.get("/random", async (req, res) => {
+   const products = await Product.find({});
+   const random = products[Math.floor(Math.random() * products.length)];
+   res.send(random);
+});
 // get all
 router.get("/", async (req, res) => {
    const products = await Product.find({});
@@ -20,8 +26,9 @@ const fileStorageEngine = multer.diskStorage({
    },
 });
 const upload = multer({ storage: fileStorageEngine });
+
 // post new product
-router.post("/", upload.single("image"), async (req, res) => {
+router.post("/", auth, upload.single("image"), async (req, res) => {
    const { error } = validateProduct(req.body);
    if (error) return res.status(400).send(error.details[0].message);
    let product = new Product({
@@ -75,8 +82,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
    let product = await Product.findOneAndRemove(req.params.id);
-   if (!product)
-      return res.status(404).send("id not fount check it again please !");
+   if (!product) return res.status(404).send("id not found check it");
    res.send(product);
 });
 
