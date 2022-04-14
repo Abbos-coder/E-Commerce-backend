@@ -11,13 +11,31 @@ router.post("/", async (req, res) => {
    let user = await User.findOne({ email: req.body.email });
    if (user) return res.status(400).send("Mavjud bo'lgan foydalanuvchi");
 
-   user = new User(_.pick(req.body, ["name", "email", "password"]));
+   user = new User(
+      _.pick(req.body, [
+         "firstname",
+         "lastname",
+         "email",
+         "password",
+         "phone",
+         "birthDay",
+      ])
+   );
    const salt = await bcrypt.genSalt();
    user.password = await bcrypt.hash(user.password, salt);
 
    await user.save();
 
-   res.send(_.pick(user, ["_id", "name", "email"]));
+   res.send(
+      _.pick(user, [
+         "_id",
+         "firstname",
+         "lastname",
+         "email",
+         "phone",
+         "birthDay",
+      ])
+   );
 });
 
 module.exports = router;
