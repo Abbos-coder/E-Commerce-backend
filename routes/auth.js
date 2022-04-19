@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const router = express.Router();
 const _ = require("lodash");
-
+const Idev = require("./../utils");
 router.post("/", async (req, res) => {
    const { error } = validate(req.body);
    if (error) return res.status(400).send(error.details[0].message);
@@ -20,7 +20,14 @@ router.post("/", async (req, res) => {
       return res.status(400).send("Email yoki parol noto'g'ri");
 
    const token = user.generateAuthToken();
-   res.header("x-auth-token", token).send(true);
+   const data = {
+      status: "success",
+      data: {
+         token,
+      },
+      error_text: "	",
+   };
+   res.send(data);
 });
 
 function validate(req) {

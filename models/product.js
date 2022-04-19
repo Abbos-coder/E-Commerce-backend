@@ -49,4 +49,3 @@ const Product = mongoose.model("Product", productSchema);
 
 exports.Product = Product;
 exports.validateProduct = validateProduct;
-// exports.productSchema = productSchema;
