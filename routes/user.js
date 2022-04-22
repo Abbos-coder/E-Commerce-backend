@@ -39,7 +39,6 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-   console.log(req.headers);
    const { authorization } = req.headers;
 });
 module.exports = router;
