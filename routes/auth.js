@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
          token,
          user,
       },
-      error_text: "	",
+      error_text: "Error :(",
    };
    res.send(data);
 });
