@@ -15,6 +15,8 @@ router.post("/", async (req, res) => {
       _.pick(req.body, [
          "firstname",
          "lastname",
+         "company",
+         "address",
          "email",
          "password",
          "phone",
@@ -31,11 +33,33 @@ router.post("/", async (req, res) => {
          "_id",
          "firstname",
          "lastname",
+         "company",
+         "address",
          "email",
          "phone",
          "birthDay",
       ])
    );
+});
+router.put("/:id", async (req, res) => {
+   const form = { ...req.body };
+   const { error } = validateUser(req.body);
+   if (error) return res.status(400).send(error.details[0].message);
+
+   const user = await User.findByIdAndUpdate(req.params.id, {
+      firstname: form.firstname,
+      lastname: form.lastname,
+      company: form.company,
+      address: form.address,
+      email: form.email,
+      phone: form.phone,
+      birthDay: form.birthDay,
+   });
+
+   if (!user) {
+      return res.status(404).send("your id not found please check it");
+   }
+   res.send(user);
 });
 
 router.get("/", async (req, res) => {

@@ -12,14 +12,14 @@ router.post("/", async (req, res) => {
    if (error) return res.status(400).send(error.details[0].message);
 
    let user = await User.findOne({ email: req.body.email });
-   if (!user) return res.status(400).send("Email yoki parol noto'g'ri");
+   if (!user) return res.status(400).send("Email yoki parol no to'g'ri");
 
    const isValidPassword = await bcrypt.compare(
       req.body.password,
       user.password
    );
    if (!isValidPassword)
-      return res.status(400).send("Email yoki parol noto'g'ri");
+      return res.status(400).send("Email yoki parol no to'g'ri");
    const token = user.generateAuthToken();
    const data = {
       status: "success",
