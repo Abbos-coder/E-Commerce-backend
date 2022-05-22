@@ -3,6 +3,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const _ = require("lodash");
+const auth = require("../middleware/auth");
 
 router.post("/", async (req, res) => {
    const { error } = validateUser(req.body);
@@ -62,7 +63,19 @@ router.put("/:id", async (req, res) => {
    res.send(user);
 });
 
-router.get("/", async (req, res) => {
-   const { authorization } = req.headers;
+router.get("/:id", auth, async (req, res) => {
+   // const { authorization } = req.headers;
+   let user = await User.findById(req.params.id);
+   if (!user) return res.status(404).send("Id not found :(");
+   const token = user.generateAuthToken();
+   const data = {
+      status: "success",
+      data: {
+         token,
+         user,
+      },
+      error_text: "Error :(",
+   };
+   res.send(user);
 });
 module.exports = router;

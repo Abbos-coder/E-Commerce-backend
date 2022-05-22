@@ -94,9 +94,21 @@ router.put("/:id", async (req, res) => {
    res.send(product);
 });
 
+// ! DELETE
 router.delete("/:id", async (req, res) => {
    let product = await Product.findOneAndRemove({ _id: req.params.id });
    if (!product) return res.status(404).send("id not found check it");
+   res.send(product);
+});
+
+//  search product
+router.get("/search-product/:search", async (req, res) => {
+   const search_data = req.params.search.trim();
+   let product = await Product.find({
+      title: { $regex: new RegExp("^" + search_data + ".*", "i") },
+   }).exec();
+   // limit search results to 5
+   product = product.slice(0, 5);
    res.send(product);
 });
 
