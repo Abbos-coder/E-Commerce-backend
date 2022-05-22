@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "go": "nodemon index.js"
+    "start": "nodemon index.js"
   },
+  "engines": {
+		"node": "14.17.5"
+	},
   "repository": {
     "type": "git",
     "url": "Diplom"
