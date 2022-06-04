@@ -18,10 +18,13 @@ app.use("/api/category", categoryRoute);
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 
-mongoose.connect("mongodb://localhost/diplom", {
-   useNewUrlParser: true,
-   useUnifiedTopology: true,
-});
+mongoose.connect(
+   "mongodb+srv://abbos:8644802@cluster0.jzaom.mongodb.net/?retryWrites=true&w=majority",
+   {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+   }
+);
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to MongoDB"));
