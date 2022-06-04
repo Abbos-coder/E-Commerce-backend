@@ -17,6 +17,7 @@ app.use("/api/product", productRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
+
 mongoose.connect("mongodb://localhost/diplom", {
    useNewUrlParser: true,
    useUnifiedTopology: true,
