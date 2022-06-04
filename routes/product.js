@@ -34,7 +34,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
    let product = new Product({
       userId: req.body.userId,
       category: req.body.category,
-      image: "http://localhost:8080/" + req.file.path,
+      image: "https://diploma-tuit.herokuapp.com/" + req.file.path,
       title: req.body.title,
       price: req.body.price,
       description: req.body.description,
