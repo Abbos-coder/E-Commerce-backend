@@ -38,6 +38,7 @@
   "devDependencies": {
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
-		"minimist": ">=1.2.6"
+		"minimist": ">=1.2.6",
+		"bcrypt": ">=5.0.0"
   }
 }
