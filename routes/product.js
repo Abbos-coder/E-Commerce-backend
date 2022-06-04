@@ -78,7 +78,7 @@ router.put("/:id", async (req, res) => {
       req.params.id,
       {
          category: form.category,
-         image: "http://localhost:8080/" + req.file.path,
+         image: "https://diploma-tuit.herokuapp.com/" + req.file.path,
          title: form.title,
          price: form.price,
          rating: form.rating,
